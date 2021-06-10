@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+    web:
+        build: .
+        container_name: "lyftron-todo-api"
+        ports:
+            - "8000:15400"
+        command: unicorn main:app --reload
+            
