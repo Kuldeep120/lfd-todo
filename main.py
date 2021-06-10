@@ -4,11 +4,10 @@ from todo import models
 from todo.database import engine, SessionLocal
 from sqlalchemy.orm import Session
 from typing import List
-# from os.path import dirname, realpath, sep, pardir
-# import sys
-# sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
+from os.path import dirname, realpath, sep, pardir
+import sys
+sys.path.append(dirname(realpath(__file__)) )
 models.Base.metadata.create_all(engine)
-
 app = FastAPI()
 
 def get_db():
@@ -40,15 +39,18 @@ def delete_todo(id: int, db: Session = Depends(get_db)):
 @app.get('/todo/{id}', status_code = status.HTTP_200_OK)
 def get_todo(id: int, db: Session = Depends(get_db)):
     todo = db.query(models.Todo).filter(models.Todo.id == id).first()
+    if not todo:
+        raise HTTPException(status_code = status.HTTP_404_NOT_FOUND,
+         detail = "Record with id %s not found" %id)
     return todo
 
 
 @app.put('/todo/{id}', status_code = status.HTTP_202_ACCEPTED)
 def update_todo(id: int, todo: schema.ToDo, db: Session = Depends(get_db)):
     update_todo = db.query(models.Todo).filter(models.Todo.id == id)
-
-    if not todo:
-        raise HTTPException(status_code=404, detail="Item not found")
+    if not update_todo.count():
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
+            detail = "Record with id %s not found" %id)
 
     update_todo.update(todo.dict())
     db.commit()
