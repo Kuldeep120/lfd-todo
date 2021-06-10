@@ -20,7 +20,6 @@ def get_db():
         db.close()
 
 
-
 @app.post('/todo/', status_code = status.HTTP_201_CREATED)
 def create_todo(todo: schema.ToDo, db: Session = Depends(get_db)):
     new_todo = models.Todo(title = todo.title, description = todo.description)
@@ -28,7 +27,7 @@ def create_todo(todo: schema.ToDo, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_todo)
     return new_todo
-    
+
 
 @app.delete('/todo/{id}', status_code = status.HTTP_204_NO_CONTENT)
 def delete_todo(id: int, db: Session = Depends(get_db)):
@@ -38,13 +37,13 @@ def delete_todo(id: int, db: Session = Depends(get_db)):
     return {'detail': 'Successfully delete the todo item'}
 
 
-@app.get('/todo/{id}')
+@app.get('/todo/{id}', status_code = status.HTTP_200_OK)
 def get_todo(id: int, db: Session = Depends(get_db)):
     todo = db.query(models.Todo).filter(models.Todo.id == id).first()
     return todo
 
 
-@app.put('/todo/{id}')
+@app.put('/todo/{id}', status_code = status.HTTP_202_ACCEPTED)
 def update_todo(id: int, todo: schema.ToDo, db: Session = Depends(get_db)):
     update_todo = db.query(models.Todo).filter(models.Todo.id == id)
 
