@@ -33,8 +33,6 @@ def test_get_todo():
     response = client.get(
         "/todo/%s"%pytest.record_id
     )
-    import pdb
-    pdb.set_trace()
     assert response.status_code == 200
     # response.json() == 
 
