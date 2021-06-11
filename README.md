@@ -3,7 +3,10 @@ Test for Lyftron Data using FastAPI
 
 install python3.8 from the source
 
-create correct database connection string in database.py file and alembic.ini
+create correct database connection string in database.py 
+
+in alembic.ini change sqlalchemy.url with you correct database url like bellow
+sqlalchemy.url = postgresql://ldf:ldf@localhost/lfdtodo
 
 create virtual environment by using
 virtualenv -p python3.8 venv
